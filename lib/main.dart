@@ -1,10 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:testa_toro/core/utils/constants.dart';
 
-void main() {
+import 'package:testa_toro/features/products/cubit/product_cubit.dart';
+import 'package:testa_toro/features/products/repos/product_repo.dart';
+import 'package:testa_toro/features/products/screens/product_screen.dart';
+
+Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  runApp(const MyApp());
+
+  await Supabase.initialize(
+    url: baseUrl,
+    anonKey: apiKey,
+  );
+
+  runApp(
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => ProductCubit(ProductRepo(Supabase.instance.client)),
+        ),
+      ],
+      child: const MyApp(),
+    ),
+  );
+
   FlutterNativeSplash.remove();
 }
 
@@ -14,26 +38,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'My App',
+      debugShowCheckedModeBanner: false,
+      title: 'TestaToro',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const MyHomePage(),
-    );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('My App'), backgroundColor: Colors.blue),
-      body: const Center(
-        child: Text(
-          'Hello, World!',
-          style: TextStyle(fontSize: 24, color: Colors.black),
-        ),
-      ),
+      home: const ProductsScreen(),
     );
   }
 }
