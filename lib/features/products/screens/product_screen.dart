@@ -79,3 +79,4 @@ class ProductsView extends StatelessWidget {
     );
   }
 }
+
