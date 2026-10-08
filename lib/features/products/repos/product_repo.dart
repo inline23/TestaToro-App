@@ -8,7 +8,10 @@ class ProductRepo {
   ProductRepo(this.supabase);
 
   Future<List<ProductModel>> getProducts() async {
-    final response = await supabase.from('products').select();
+    // product_images(*) pulls each product's images through the foreign key.
+    final response = await supabase.from('products').select(
+          '*, product_images(*)',
+        );
 
     return (response as List)
         .map(

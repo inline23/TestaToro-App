@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:testa_toro/core/widgets/app_network_image.dart';
 import 'package:testa_toro/features/products/repos/product_repo.dart';
 
 import '../cubit/product_cubit.dart';
@@ -61,6 +62,12 @@ class ProductsView extends StatelessWidget {
                 final product = state.products[index];
 
                 return ListTile(
+                  leading: AppNetworkImage(
+                    url: product.primaryImageUrl,
+                    width: 56,
+                    height: 56,
+                    memCacheWidth: 200,
+                  ),
                   title: Text(product.name),
                   subtitle: Text(
                     product.description ?? '',
@@ -79,4 +86,3 @@ class ProductsView extends StatelessWidget {
     );
   }
 }
-

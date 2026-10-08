@@ -1,3 +1,5 @@
+import 'product_image_model.dart';
+
 class ProductModel {
   final int id;
   final int? categoryId;
@@ -7,6 +9,7 @@ class ProductModel {
   final bool isActive;
   final DateTime? createdAt;
   final DateTime? updatedAt;
+  final List<ProductImageModel> images;
 
   const ProductModel({
     required this.id,
@@ -17,9 +20,23 @@ class ProductModel {
     required this.isActive,
     this.createdAt,
     this.updatedAt,
+    this.images = const [],
   });
 
+  /// The primary image if there is one, otherwise the first by sort order.
+  String? get primaryImageUrl {
+    if (images.isEmpty) return null;
+    return images
+        .firstWhere((img) => img.isPrimary, orElse: () => images.first)
+        .imageUrl;
+  }
+
   factory ProductModel.fromJson(Map<String, dynamic> json) {
+    final images = ((json['product_images'] as List?) ?? [])
+        .map((e) => ProductImageModel.fromJson(e as Map<String, dynamic>))
+        .toList()
+      ..sort((a, b) => a.sortOrder.compareTo(b.sortOrder));
+
     return ProductModel(
       id: json['id'] as int,
       categoryId: json['category_id'] as int?,
@@ -33,6 +50,7 @@ class ProductModel {
       updatedAt: json['updated_at'] != null
           ? DateTime.parse(json['updated_at'] as String)
           : null,
+      images: images,
     );
   }
 

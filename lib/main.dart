@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:testa_toro/core/utils/constants.dart';
+import 'package:testa_toro/features/home/screens/home_screen.dart';
 
 import 'package:testa_toro/features/products/cubit/product_cubit.dart';
 import 'package:testa_toro/features/products/repos/product_repo.dart';
-import 'package:testa_toro/features/products/screens/product_screen.dart';
 
 Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'TestaToro',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const ProductsScreen(),
+      home: const HomeScreen(),
     );
   }
 }
