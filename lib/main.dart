@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:testa_toro/core/utils/constants.dart';
-import 'package:testa_toro/features/home/screens/home_screen.dart';
-
+import 'package:testa_toro/features/navigation/cubit/navigation_cubit.dart';
+import 'package:testa_toro/features/navigation/screens/main_shell.dart';
 import 'package:testa_toro/features/products/cubit/product_cubit.dart';
 import 'package:testa_toro/features/products/repos/product_repo.dart';
 
@@ -21,8 +21,12 @@ Future<void> main() async {
   runApp(
     MultiBlocProvider(
       providers: [
+        // Selected tab: one source of truth for the whole app.
+        BlocProvider(create: (_) => NavigationCubit()),
+        // Created once and shared by Home and Products. Loads products once.
         BlocProvider(
-          create: (_) => ProductCubit(ProductRepo(Supabase.instance.client)),
+          create: (_) =>
+              ProductCubit(ProductRepo(Supabase.instance.client))..getProducts(),
         ),
       ],
       child: const MyApp(),
@@ -41,7 +45,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'TestaToro',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: const HomeScreen(),
+      home: const MainShell(),
     );
   }
 }
