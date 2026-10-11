@@ -75,7 +75,7 @@ lib/
 │   ├── constants/
 │   ├── theme/
 │   ├── utils/
-│   └── widgets/
+│   └── widgets/ 
 │
 ├── features/
 │   │
